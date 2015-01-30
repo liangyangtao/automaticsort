@@ -83,7 +83,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/IKAnalyzer2012_u6.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-3.6.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
