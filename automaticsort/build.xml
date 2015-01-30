@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<project name="automaticsort" default="war" basedir=".">  
+    <property name="tomcat.lib" value="D:/apache-tomcat-6.0.41/lib" />  
+    <property name="WebRoot" value="WebRoot" />
+    <property name="dist.release.dir" value="dist-release" />
+    <property name="dist.release.classes.dir" value="${dist.release.dir}/WEB-INF/classes" />
+    <property name="dist.release.WEB-INF" location="${dist.release.dir}/WEB-INF"/>
+    <property name="dist.test.dir" value="dist-test" />
+    <property name="dist.test.classes.dir" value="${dist.test.dir}/WEB-INF/classes" />
+    <property name="dist.test.WEB-INF" location="${dist.test.dir}/WEB-INF"/>
+    <property name="src.dir" value="src" />  
+    <property name="war.release.dir" value="war-release" />
+    <property name="war.test.dir" value="war-test" />
+    <target name="init" depends="clean">  
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+    	<mkdir dir="${dist.release.dir}" />
+    	<mkdir dir="${dist.release.WEB-INF}" />
+        <mkdir dir="${dist.release.classes.dir}" />  
+        <mkdir dir="${war.release.dir}" />
+    	<mkdir dir="${dist.test.dir}" />
+    	<mkdir dir="${dist.test.WEB-INF}" />
+        <mkdir dir="${dist.test.classes.dir}" />  
+        <mkdir dir="${war.test.dir}" />
+    </target>  
+	<target name="copyto" depends="init">  
+		<copy todir="${dist.release.classes.dir}/" file="${src.dir}/dbconfig.properties"/> 
+		<copy todir="${dist.release.classes.dir}/" file="${src.dir}/IKAnalyzer.cfg.xml"/> 
+		<copy todir="${dist.release.classes.dir}/" file="${src.dir}/log4j.properties"/> 
+		<copy todir="${dist.test.classes.dir}/" file="${src.dir}/config-test/dbconfig.properties"/> 
+		<copy todir="${dist.test.classes.dir}/" file="${src.dir}/config-test/IKAnalyzer.cfg.xml"/> 
+		<copy todir="${dist.test.classes.dir}/" file="${src.dir}/config-test/log4j.properties"/> 
+	</target>  
+    <target name="compile" depends="copyto">  
+	    
+        <javac srcdir="${src.dir}" destdir="${dist.release.classes.dir}" encoding="utf-8" includeantruntime="false" compiler="javac1.6">  
+            <classpath>  
+<!--                <fileset dir="${tomcat.lib}">  
+                    <include name="*.jar" />  
+                </fileset>  
+-->                <fileset dir="WebRoot/WEB-INF/lib">  
+                    <include name="*.jar" />  
+                </fileset>  
+            </classpath>  
+        </javac>  
+        <copy todir="${dist.test.classes.dir}">
+            <fileset dir="${dist.release.classes.dir}">
+                <exclude name=".svn/**"/>
+            </fileset>
+        </copy>
+		
+    </target>  
+    <target name="clean">  
+        <delete dir="${dist.release.dir}" />  
+        <delete dir="${dist.test.dir}" />  
+    </target>
+    <target name="dist" depends="compile">
+        <copy todir="${dist.release.dir}">
+            <fileset dir="${WebRoot}">
+                <exclude name=".svn/**"/>
+                <exclude name="classes/**/*"/>
+            </fileset>
+        </copy>
+        <copy todir="${dist.test.dir}">
+            <fileset dir="${WebRoot}">
+                <exclude name=".svn/**"/>
+                <exclude name="classes/**/*"/>
+            </fileset>
+        </copy>
+    
+    </target>  
+    
+        <target name="war" depends="dist">
+        <war destfile="${war.release.dir}/automaticsort.war" webxml="${WebRoot}/WEB-INF/web.xml" basedir="${dist.release.dir}" />
+        <war destfile="${war.test.dir}/automaticsort.war" webxml="${WebRoot}/WEB-INF/web.xml" basedir="${dist.test.dir}" />
+    </target>
+
+</project>  
